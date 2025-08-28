@@ -1,0 +1,25 @@
+#
+FROM python:3.11.2
+
+#
+WORKDIR /EROS4NRG
+
+COPY ./training_environment/requirements.txt .
+
+#
+RUN pip install --no-cache-dir -r requirements.txt
+
+ENV PYTHONPATH="${PYTHONPATH}:/EROS4NRG"
+
+COPY ./config config/
+COPY ./clients clients/
+COPY ./data_pipeline/ data_pipeline/
+COPY ./training_environment/ training_environment/
+
+# Change permission for bash script
+RUN chmod 744 training_environment/regressors.py
+RUN chmod 744 training_environment/train_MLP.py
+RUN chmod 744 training_environment/start_training.sh
+
+#
+CMD ["training_environment/start_training.sh"]
