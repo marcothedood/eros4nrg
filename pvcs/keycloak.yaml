@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: keycloak-pvc
+  name: eros-keycloak-pvc
 spec:
   storageClassName: rook-ceph-block
   accessModes:

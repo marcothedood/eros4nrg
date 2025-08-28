@@ -1,27 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: training-environment
+  name: eros-training-environment
   labels:
     app: eros
     type: backend
-    deployment: training-environment
+    deployment: eros-training-environment
 spec:
   replicas: 0
   selector:
     matchLabels:
-      pod: training-environment
+      pod: eros-training-environment
   template:
     metadata:
       labels:
+        pod: eros-training-environment
         app: eros
         type: backend
-        deployment: training-environment
+        deployment: eros-training-environment
     spec:
       imagePullSecrets:
-        - name: nemo-regcred
+        - name: marco-regcred
       containers:
-        - name: training-environment
+        - name: eros-training-environment
           image: marcothedood/eros4nrg-demo:training-environment
           imagePullPolicy: Always
           ports:

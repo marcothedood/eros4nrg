@@ -1,136 +1,110 @@
---
--- PostgreSQL database dump
---
--- Dumped from database version 14.19
--- Dumped by pg_dump version 14.19
+-- Schema base (safe se esiste già)
+CREATE SCHEMA IF NOT EXISTS public;
 
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
-
-SET default_tablespace = '';
-
-SET default_table_access_method = heap;
-
---
--- Name: predicted_battery_percentage_cat; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.predicted_battery_percentage_cat (
+-- Crea vehicle_states se non esiste, già coi tipi giusti
+CREATE TABLE IF NOT EXISTS public.vehicle_states (
+    id                 bigint,
     battery_percentage double precision,
-    "timestamp" timestamp without time zone,
-    vehicle bigint
+    velocity           double precision,
+    "timestamp"        timestamp without time zone,
+    in_charge          boolean,
+    efficiency         text,
+    charges_count      bigint,
+    km_tot             double precision,
+    kwh_charged        double precision,
+    vehicle            bigint
 );
 
+-- Se la tabella esiste ma con tipi sbagliati (es. text), li correggiamo.
+DO $$
+BEGIN
+    -- id
+    IF (SELECT data_type FROM information_schema.columns 
+        WHERE table_schema='public' AND table_name='vehicle_states' AND column_name='id') <> 'bigint' THEN
+        ALTER TABLE public.vehicle_states
+          ALTER COLUMN id TYPE bigint USING NULLIF(id,'')::bigint;
+    END IF;
 
---
--- Name: predicted_w4_building_consumption_cat; Type: TABLE; Schema: public; Owner: -
---
+    -- battery_percentage
+    IF (SELECT data_type FROM information_schema.columns 
+        WHERE table_schema='public' AND table_name='vehicle_states' AND column_name='battery_percentage') NOT IN ('double precision') THEN
+        ALTER TABLE public.vehicle_states
+          ALTER COLUMN battery_percentage TYPE double precision USING NULLIF(battery_percentage,'')::double precision;
+    END IF;
 
-CREATE TABLE public.predicted_w4_building_consumption_cat (
-    w4_building_consumption double precision,
-    "timestamp" timestamp without time zone
-);
+    -- velocity
+    IF (SELECT data_type FROM information_schema.columns 
+        WHERE table_schema='public' AND table_name='vehicle_states' AND column_name='velocity') NOT IN ('double precision') THEN
+        ALTER TABLE public.vehicle_states
+          ALTER COLUMN velocity TYPE double precision USING NULLIF(velocity,'')::double precision;
+    END IF;
 
+    -- timestamp (stringhe tipo 2019-01-08T08:58:55+01:00 -> timestamptz -> AT TIME ZONE 'UTC')
+    IF (SELECT data_type FROM information_schema.columns 
+        WHERE table_schema='public' AND table_name='vehicle_states' AND column_name='timestamp') NOT IN ('timestamp without time zone') THEN
+        ALTER TABLE public.vehicle_states
+          ALTER COLUMN "timestamp" TYPE timestamp WITHOUT TIME ZONE
+          USING (
+            CASE
+              WHEN "timestamp" ~ '^\d{4}-\d{2}-\d{2}T' THEN (("timestamp")::timestamptz AT TIME ZONE 'UTC')
+              ELSE ("timestamp")::timestamp
+            END
+          );
+    END IF;
 
---
--- Name: predicted_w4_production_cat; Type: TABLE; Schema: public; Owner: -
---
+    -- in_charge (gestione true/false/1/0)
+    IF (SELECT data_type FROM information_schema.columns 
+        WHERE table_schema='public' AND table_name='vehicle_states' AND column_name='in_charge') <> 'boolean' THEN
+        ALTER TABLE public.vehicle_states
+          ALTER COLUMN in_charge TYPE boolean USING
+            CASE
+              WHEN lower(in_charge) IN ('t','true','1') THEN true
+              WHEN lower(in_charge) IN ('f','false','0') THEN false
+              ELSE NULL
+            END;
+    END IF;
 
-CREATE TABLE public.predicted_w4_production_cat (
-    w4_production double precision,
-    "timestamp" timestamp without time zone
-);
+    -- efficiency deve rimanere TEXT (accetta "charging")
+    IF (SELECT data_type FROM information_schema.columns 
+        WHERE table_schema='public' AND table_name='vehicle_states' AND column_name='efficiency') <> 'text' THEN
+        ALTER TABLE public.vehicle_states
+          ALTER COLUMN efficiency TYPE text USING efficiency::text;
+    END IF;
 
+    -- charges_count
+    IF (SELECT data_type FROM information_schema.columns 
+        WHERE table_schema='public' AND table_name='vehicle_states' AND column_name='charges_count') <> 'bigint' THEN
+        ALTER TABLE public.vehicle_states
+          ALTER COLUMN charges_count TYPE bigint USING NULLIF(charges_count,'')::bigint;
+    END IF;
 
---
--- Name: prophet_forecast_w4_building_consumption; Type: TABLE; Schema: public; Owner: -
---
+    -- km_tot
+    IF (SELECT data_type FROM information_schema.columns 
+        WHERE table_schema='public' AND table_name='vehicle_states' AND column_name='km_tot') NOT IN ('double precision') THEN
+        ALTER TABLE public.vehicle_states
+          ALTER COLUMN km_tot TYPE double precision USING NULLIF(km_tot,'')::double precision;
+    END IF;
 
-CREATE TABLE public.prophet_forecast_w4_building_consumption (
-    "timestamp" timestamp without time zone,
-    w4_building_consumption double precision,
-    trend double precision,
-    daily double precision,
-    hourly double precision,
-    weekly double precision
-);
+    -- kwh_charged
+    IF (SELECT data_type FROM information_schema.columns 
+        WHERE table_schema='public' AND table_name='vehicle_states' AND column_name='kwh_charged') NOT IN ('double precision') THEN
+        ALTER TABLE public.vehicle_states
+          ALTER COLUMN kwh_charged TYPE double precision USING NULLIF(kwh_charged,'')::double precision;
+    END IF;
 
+    -- vehicle
+    IF (SELECT data_type FROM information_schema.columns 
+        WHERE table_schema='public' AND table_name='vehicle_states' AND column_name='vehicle') <> 'bigint' THEN
+        ALTER TABLE public.vehicle_states
+          ALTER COLUMN vehicle TYPE bigint USING NULLIF(vehicle,'')::bigint;
+    END IF;
 
---
--- Name: tower; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.tower (
-    tower bigint,
-    charge_id integer[]
-);
-
-
---
--- Name: tower_states; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.tower_states (
-    id bigint,
-    plugs_state text,
-    "timestamp" timestamp without time zone,
-    ac_max_current double precision,
-    dc_modules_number text,
-    dc_min_voltage text,
-    dc_max_voltage text,
-    dc_max_current double precision,
-    tower bigint
-);
-
-
---
--- Name: vehicle; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.vehicle (
-    vehicle bigint,
-    charge_id integer[]
-);
-
-
---
--- Name: vehicle_states; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.vehicle_states (
-    id bigint,
-    battery_percentage double precision,
-    velocity double precision,
-    "timestamp" timestamp without time zone,
-    in_charge boolean,
-    efficiency text,
-    charges_count bigint,
-    km_tot double precision,
-    kwh_charged double precision,
-    vehicle bigint
-);
-
-
---
--- Name: w4_calc; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.w4_calc (
-    "timestamp" timestamp without time zone,
-    w4_production double precision,
-    w4_building_consumption double precision
-);
-
-
---
--- PostgreSQL database dump complete
---
-
+    -- Piccolo registro di migrazioni
+    CREATE SCHEMA IF NOT EXISTS bootstrap;
+    CREATE TABLE IF NOT EXISTS bootstrap.migrations (
+      id text primary key,
+      applied_at timestamptz default now()
+    );
+    INSERT INTO bootstrap.migrations(id) VALUES ('schema-vehicle-states-typed-001')
+      ON CONFLICT DO NOTHING;
+END $$;

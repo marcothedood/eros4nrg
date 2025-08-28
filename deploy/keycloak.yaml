@@ -1,29 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: keycloak
+  name: eros-keycloak
   labels:
     app: eros
     type: backend
-    deployment: keycloak
-
+    deployment: eros-keycloak
 spec:
   replicas: 1
   selector:
     matchLabels:
-      pod: keycloak
+      pod: eros-keycloak
   template:
     metadata:
-      app: eros
-      type: backend
-      deployment: keycloak
+      labels:
+        pod: eros-keycloak
+        app: eros
+        type: backend
+        deployment: eros-keycloak
     spec:
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
       containers:
-      - name: keycloak
+      - name: eros-keycloak
         image: quay.io/keycloak/keycloak:21.1.2
         imagePullPolicy: Always
         args:
@@ -66,4 +67,4 @@ spec:
       volumes:
       - name: h2-volume
         persistentVolumeClaim:
-          claimName: keycloak-pvc
+          claimName: eros-keycloak-pvc

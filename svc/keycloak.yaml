@@ -1,16 +1,17 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: keycloak
+  name: eros-keycloak
   labels:
     app: eros
     type: backend
-    service: keycloak
+    service: eros-keycloak
 spec:
   selector:
+    pod: eros-keycloak
     app: eros
     type: backend
-    deployment: keycloak
+    deployment: eros-keycloak
   ports:
     - name: http
       port: 8080

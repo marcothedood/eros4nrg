@@ -1,30 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres
+  name: eros-postgres
   labels:
     app: eros
     type: backend
-    deployment: postgres
+    deployment: eros-postgres
 spec:
   replicas: 1
   selector:
     matchLabels:
-      pod: postgres
+      pod: eros-postgres
   template:
     metadata:
       labels:
+        pod: eros-postgres
         app: eros
         type: backend
-        deployment: postgres
+        deployment: eros-postgres
     spec:
       containers:
-      - name: postgres
+      - name: eros-postgres
         image: postgres:14-alpine
         imagePullPolicy: Always
         ports:
         - containerPort: 5432
-          name: postgres
+          name: eros-postgres
         env:
         - name: POSTGRES_PASSWORD
           valueFrom:
@@ -41,4 +42,4 @@ spec:
       volumes:
       - name: pg-volume
         persistentVolumeClaim:
-          claimName: postgres-pvc
+          claimName: eros-postgres-pvc

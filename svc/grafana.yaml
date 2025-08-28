@@ -1,16 +1,17 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: grafana
+  name: eros-grafana
   labels:
     app: eros
     type: frontend
-    service: grafana
+    service: eros-grafana
 spec:
   selector:
+    pod: eros-grafana
     app: eros
     type: frontend
-    deployment: grafana
+    deployment: eros-grafana
   ports:
     - name: http
       port: 80

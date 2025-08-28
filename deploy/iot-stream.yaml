@@ -1,28 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: iot-stream
+  name: eros-iot-stream
   labels:
     app: eros
     type: backend
-    deployment: iot-stream
-
+    deployment: eros-iot-stream
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
-      pod: iot-stream
+      pod: eros-iot-stream
   template:
     metadata:
       labels:
+        pod: eros-iot-stream
         app: eros
         type: backend
-        deployment: iot-stream
+        deployment: eros-iot-stream
     spec:
       imagePullSecrets:
-        - name: nemo-regcred
+        - name: marco-regcred
       containers:
-        - name: iot-stream
+        - name: eros-iot-stream
           image: marcothedood/eros4nrg-demo:iot-stream
           imagePullPolicy: Always
           ports:

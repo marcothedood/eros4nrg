@@ -134,3 +134,7 @@ dmypy.json
 # IDEs
 .idea/
 .vscode/
+
+docker.yaml
+data-db-dump/
+grafana_backup/*

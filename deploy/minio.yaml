@@ -1,25 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: minio
+  name: eros-minio
   labels:
-    app: eros
+    app: eros-minio
     type: backend
-    deployment: minio
+    deployment: eros-minio
 spec:
   replicas: 1
   selector:
     matchLabels:
-      pod: minio
+      pod: eros-minio
   template:
     metadata:
       labels:
+        pod: eros-minio
         app: eros
         type: backend
-        deployment: minio
+        deployment: eros-minio
     spec:
       containers:
-        - name: minio
+        - name: eros-minio
           image: bitnami/minio:latest
           imagePullPolicy: Always
           ports:
@@ -50,4 +51,4 @@ spec:
       volumes:
         - name: iotdata
           persistentVolumeClaim:
-            claimName: iotdata
+            claimName: eros-iotdata

@@ -347,7 +347,7 @@ Note that those images (in our scenario) are hosted on a private registry and th
 
 ```
 imagePullSecrets:
-        - name: nemo-regcred
+        - name: marco-regcred
 ```
 in our deployments. 
 

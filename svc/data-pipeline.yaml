@@ -1,16 +1,17 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: data-pipeline
+  name: eros-data-pipeline
   labels:
     app: eros
     type: backend
-    service: data-pipeline
+    service: eros-data-pipeline
 spec:
   selector:
+    pod: eros-data-pipeline
     app: eros
     type: backend
-    deployment: data-pipeline
+    deployment: eros-data-pipeline
   ports:
     - name: http
       port: 8002

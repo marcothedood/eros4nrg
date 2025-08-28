@@ -114,7 +114,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage\nFROM \"vehicle_states\"\nWHERE\n  vehicle = $vehicle",
+          "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage::double precision\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = ${vehicle}",
           "refId": "A",
           "select": [
             [
@@ -147,7 +147,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage as \"forecast\"\nFROM predicted_battery_percentage_cat\nWHERE\n  vehicle = '$vehicle'\nORDER BY 1",
+          "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage::double precision AS \"forecast\"\nFROM predicted_battery_percentage_cat\nWHERE\n  vehicle::bigint = ${vehicle}\nORDER BY 1",
           "refId": "B",
           "select": [
             [
@@ -280,7 +280,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot as vehicle1\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot::double precision AS value\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 1",
               "refId": "A",
               "select": [
                 [
@@ -313,7 +313,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot as vehicle2\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 2",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot::double precision AS value\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 2",
               "refId": "B",
               "select": [
                 [
@@ -346,7 +346,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot as vehicle3\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 3",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot::double precision AS value\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 3",
               "refId": "C",
               "select": [
                 [
@@ -379,7 +379,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot as vehicle4\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 4",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot::double precision AS value\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 4",
               "refId": "D",
               "select": [
                 [
@@ -412,7 +412,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot as vehicle5\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 5",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot::double precision AS value\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 5",
               "refId": "E",
               "select": [
                 [
@@ -445,7 +445,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot as vehicle6\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 6",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot::double precision AS value\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 6",
               "refId": "F",
               "select": [
                 [
@@ -478,7 +478,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot as vehicle7\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 7",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot::double precision AS value\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 7",
               "refId": "G",
               "select": [
                 [
@@ -511,7 +511,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot as vehicle8\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 8",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot::double precision AS value\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 8",
               "refId": "H",
               "select": [
                 [
@@ -544,7 +544,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot as vehicle9\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 9",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot::double precision AS value\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 9",
               "refId": "I",
               "select": [
                 [
@@ -577,7 +577,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot as vehicle10\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 10",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot::double precision AS value\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 10",
               "refId": "J",
               "select": [
                 [
@@ -610,7 +610,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot as vehicle11\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 11",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot::double precision AS value\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 11",
               "refId": "K",
               "select": [
                 [
@@ -643,7 +643,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot as vehicle12\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 12",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot::double precision AS value\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 12",
               "refId": "L",
               "select": [
                 [
@@ -676,7 +676,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot as vehicle13\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 13",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot::double precision AS value\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 13",
               "refId": "M",
               "select": [
                 [
@@ -709,7 +709,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot as vehicle14\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 14",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot::double precision AS value\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 14",
               "refId": "N",
               "select": [
                 [
@@ -742,7 +742,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot as vehicle15\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 15",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot::double precision AS value\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 15",
               "refId": "O",
               "select": [
                 [
@@ -775,7 +775,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot as vehicle16\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 16",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot::double precision AS value\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 16",
               "refId": "P",
               "select": [
                 [
@@ -808,7 +808,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot as vehicle17\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 17",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot::double precision AS value\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 17",
               "refId": "Q",
               "select": [
                 [
@@ -841,7 +841,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot as vehicle18\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 18",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot::double precision AS value\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 18",
               "refId": "R",
               "select": [
                 [
@@ -954,7 +954,7 @@
               "group": [],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  CAST(kwh_charged as float) as vehicle1\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 1\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  kwh_charged::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 1\nORDER BY 1",
               "refId": "A",
               "select": [
                 [
@@ -987,7 +987,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  CAST(kwh_charged as float) as vehicle2\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 2\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  kwh_charged::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 2\nORDER BY 1",
               "refId": "B",
               "select": [
                 [
@@ -1020,7 +1020,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  CAST(kwh_charged as float) as vehicle3\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 3\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  kwh_charged::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 3\nORDER BY 1",
               "refId": "C",
               "select": [
                 [
@@ -1053,7 +1053,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  CAST(kwh_charged as float) as vehicle4\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 4\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  kwh_charged::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 4\nORDER BY 1",
               "refId": "D",
               "select": [
                 [
@@ -1086,7 +1086,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  CAST(kwh_charged as float) as vehicle5\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 5\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  kwh_charged::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 5\nORDER BY 1",
               "refId": "E",
               "select": [
                 [
@@ -1119,7 +1119,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  CAST(kwh_charged as float) as vehicle6\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 6\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  kwh_charged::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 6\nORDER BY 1",
               "refId": "F",
               "select": [
                 [
@@ -1152,7 +1152,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  CAST(kwh_charged as float) as vehicle7\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 7\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  kwh_charged::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 7\nORDER BY 1",
               "refId": "G",
               "select": [
                 [
@@ -1185,7 +1185,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  CAST(kwh_charged as float) as vehicle8\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 8\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  kwh_charged::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 8\nORDER BY 1",
               "refId": "H",
               "select": [
                 [
@@ -1218,7 +1218,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  CAST(kwh_charged as float) as vehicle9\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 9\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  kwh_charged::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 9\nORDER BY 1",
               "refId": "I",
               "select": [
                 [
@@ -1251,7 +1251,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  CAST(kwh_charged as float) as vehicle10\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 10\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  kwh_charged::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 10\nORDER BY 1",
               "refId": "J",
               "select": [
                 [
@@ -1284,7 +1284,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  CAST(kwh_charged as float) as vehicle11\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 11\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  kwh_charged::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 11\nORDER BY 1",
               "refId": "K",
               "select": [
                 [
@@ -1317,7 +1317,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  CAST(kwh_charged as float) as vehicle12\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 12\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  kwh_charged::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 12\nORDER BY 1",
               "refId": "L",
               "select": [
                 [
@@ -1350,7 +1350,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  CAST(kwh_charged as float) as vehicle13\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 13\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  kwh_charged::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 13\nORDER BY 1",
               "refId": "M",
               "select": [
                 [
@@ -1383,7 +1383,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  CAST(kwh_charged as float) as vehicle14\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 14\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  kwh_charged::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 14\nORDER BY 1",
               "refId": "N",
               "select": [
                 [
@@ -1416,7 +1416,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  CAST(kwh_charged as float) as vehicle15\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 15\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  kwh_charged::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 15\nORDER BY 1",
               "refId": "O",
               "select": [
                 [
@@ -1449,7 +1449,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  CAST(kwh_charged as float) as vehicle16\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 16\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  kwh_charged::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 16\nORDER BY 1",
               "refId": "P",
               "select": [
                 [
@@ -1482,7 +1482,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  CAST(kwh_charged as float) as vehicle17\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 17\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  kwh_charged::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 17\nORDER BY 1",
               "refId": "Q",
               "select": [
                 [
@@ -1515,7 +1515,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  CAST(kwh_charged as float) as vehicle18\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 18\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  kwh_charged::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 18\nORDER BY 1",
               "refId": "R",
               "select": [
                 [
@@ -1628,7 +1628,7 @@
               "group": [],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count as vehicle1\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 1\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 1\nORDER BY 1",
               "refId": "A",
               "select": [
                 [
@@ -1661,7 +1661,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count as vehicle2\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 2\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 2\nORDER BY 1",
               "refId": "B",
               "select": [
                 [
@@ -1694,7 +1694,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count as vehicle3\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 3\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 3\nORDER BY 1",
               "refId": "C",
               "select": [
                 [
@@ -1727,7 +1727,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count as vehicle4\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 4\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 4\nORDER BY 1",
               "refId": "D",
               "select": [
                 [
@@ -1760,7 +1760,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count as vehicle5\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 5\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 5\nORDER BY 1",
               "refId": "E",
               "select": [
                 [
@@ -1793,7 +1793,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count as vehicle6\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 6\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 6\nORDER BY 1",
               "refId": "F",
               "select": [
                 [
@@ -1826,7 +1826,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count as vehicle7\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 7\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 7\nORDER BY 1",
               "refId": "G",
               "select": [
                 [
@@ -1859,7 +1859,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count as vehicle8\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 8\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 8\nORDER BY 1",
               "refId": "H",
               "select": [
                 [
@@ -1892,7 +1892,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count as vehicle9\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 9\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 9\nORDER BY 1",
               "refId": "I",
               "select": [
                 [
@@ -1925,7 +1925,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count as vehicle10\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 10\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 10\nORDER BY 1",
               "refId": "J",
               "select": [
                 [
@@ -1958,7 +1958,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count as vehicle11\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 11\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 11\nORDER BY 1",
               "refId": "K",
               "select": [
                 [
@@ -1991,7 +1991,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count as vehicle12\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 12\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 12\nORDER BY 1",
               "refId": "L",
               "select": [
                 [
@@ -2024,7 +2024,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count as vehicle13\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 13\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 13\nORDER BY 1",
               "refId": "M",
               "select": [
                 [
@@ -2057,7 +2057,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count as vehicle14\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 14\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 14\nORDER BY 1",
               "refId": "N",
               "select": [
                 [
@@ -2090,7 +2090,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count as vehicle15\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 15\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 15\nORDER BY 1",
               "refId": "O",
               "select": [
                 [
@@ -2123,7 +2123,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count as vehicle16\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 16\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 16\nORDER BY 1",
               "refId": "P",
               "select": [
                 [
@@ -2156,7 +2156,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count as vehicle17\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 17\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 17\nORDER BY 1",
               "refId": "Q",
               "select": [
                 [
@@ -2189,7 +2189,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count as vehicle18\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 18\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 18\nORDER BY 1",
               "refId": "R",
               "select": [
                 [
@@ -2301,7 +2301,7 @@
               "group": [],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage as vehicle1\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 1\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 1\nORDER BY 1",
               "refId": "A",
               "select": [
                 [
@@ -2334,7 +2334,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage as vehicle2\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 2\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 2\nORDER BY 1",
               "refId": "B",
               "select": [
                 [
@@ -2367,7 +2367,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage as vehicle3\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 3\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 3\nORDER BY 1",
               "refId": "C",
               "select": [
                 [
@@ -2400,7 +2400,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage as vehicle4\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 4\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 4\nORDER BY 1",
               "refId": "D",
               "select": [
                 [
@@ -2433,7 +2433,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage as vehicle5\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 5\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 5\nORDER BY 1",
               "refId": "E",
               "select": [
                 [
@@ -2466,7 +2466,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage as vehicle6\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 6\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 6\nORDER BY 1",
               "refId": "F",
               "select": [
                 [
@@ -2499,7 +2499,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage as vehicle7\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 7\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 7\nORDER BY 1",
               "refId": "G",
               "select": [
                 [
@@ -2532,7 +2532,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage as vehicle8\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 8\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 8\nORDER BY 1",
               "refId": "H",
               "select": [
                 [
@@ -2565,7 +2565,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage as vehicle9\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 9\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 9\nORDER BY 1",
               "refId": "I",
               "select": [
                 [
@@ -2598,7 +2598,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage as vehicle10\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 10\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 10\nORDER BY 1",
               "refId": "J",
               "select": [
                 [
@@ -2631,7 +2631,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage as vehicle11\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 11\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 11\nORDER BY 1",
               "refId": "K",
               "select": [
                 [
@@ -2664,7 +2664,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage as vehicle12\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 12\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 12\nORDER BY 1",
               "refId": "L",
               "select": [
                 [
@@ -2697,7 +2697,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage as vehicle13\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 13\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 13\nORDER BY 1",
               "refId": "M",
               "select": [
                 [
@@ -2730,7 +2730,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage as vehicle14\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 14\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 14\nORDER BY 1",
               "refId": "N",
               "select": [
                 [
@@ -2763,7 +2763,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage as vehicle15\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 15\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 15\nORDER BY 1",
               "refId": "O",
               "select": [
                 [
@@ -2796,7 +2796,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage as vehicle16\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 16\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 16\nORDER BY 1",
               "refId": "P",
               "select": [
                 [
@@ -2829,7 +2829,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage as vehicle17\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 17\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 17\nORDER BY 1",
               "refId": "Q",
               "select": [
                 [
@@ -2862,7 +2862,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage as vehicle18\nFROM \"vehicle_states\"\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle = 18\nORDER BY 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage::double precision AS value\nFROM public.vehicle_states\nWHERE\n  $__timeFilter(\"timestamp\")\nand vehicle::bigint = 18\nORDER BY 1",
               "refId": "R",
               "select": [
                 [
@@ -2988,7 +2988,7 @@
               "group": [],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot as vehicle1\nFROM \"vehicle_states\"\nWHERE\n  vehicle = $vehicle",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot::double precision AS value\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = ${vehicle}",
               "refId": "A",
               "select": [
                 [
@@ -3100,7 +3100,7 @@
               "group": [],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  CAST(kwh_charged AS float)\nFROM \"vehicle_states\"\nWHERE\n  vehicle = $vehicle",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  kwh_charged::double precision\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = ${vehicle}",
               "refId": "A",
               "select": [
                 [
@@ -3212,7 +3212,7 @@
               "group": [],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count\nFROM \"vehicle_states\"\nWHERE\n  vehicle = $vehicle",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  charges_count\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = ${vehicle}",
               "refId": "A",
               "select": [
                 [
@@ -3324,7 +3324,7 @@
               "group": [],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage\nFROM \"vehicle_states\"\nWHERE\n  vehicle = $vehicle",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage::double precision\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = ${vehicle}",
               "refId": "A",
               "select": [
                 [
@@ -3436,7 +3436,7 @@
               "group": [],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 3",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage::double precision\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 3",
               "refId": "A",
               "select": [
                 [
@@ -3469,7 +3469,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 8",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage::double precision\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 8",
               "refId": "B",
               "select": [
                 [
@@ -3502,7 +3502,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage::double precision\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 1",
               "refId": "C",
               "select": [
                 [
@@ -3535,7 +3535,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 9",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  battery_percentage::double precision\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 9",
               "refId": "D",
               "select": [
                 [
@@ -3647,7 +3647,7 @@
               "group": [],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot as vehicle1\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 1",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot::double precision AS value\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 1",
               "refId": "A",
               "select": [
                 [
@@ -3680,7 +3680,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot as vehicle2\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 2",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot::double precision AS value\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 2",
               "refId": "B",
               "select": [
                 [
@@ -3713,7 +3713,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot as vehicle3\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 3",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot::double precision AS value\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 3",
               "refId": "C",
               "select": [
                 [
@@ -3746,7 +3746,7 @@
               "hide": false,
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot as vehicle4\nFROM \"vehicle_states\"\nWHERE\n  vehicle = 4",
+              "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  km_tot::double precision AS value\nFROM public.vehicle_states\nWHERE\n  vehicle::bigint = 4",
               "refId": "D",
               "select": [
                 [
@@ -3801,7 +3801,7 @@
         "multi": false,
         "name": "vehicle",
         "options": [],
-        "query": "SELECT vehicle FROM vehicle",
+        "query": "SELECT vehicle::bigint AS __value, vehicle::text AS __text\nFROM public.vehicle\nWHERE vehicle IS NOT NULL\nORDER BY 1;",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,

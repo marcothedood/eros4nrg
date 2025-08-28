@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: pg-bootstrap
+  name: eros-pg-bootstrap
 spec:
   backoffLimit: 0
   ttlSecondsAfterFinished: 180
@@ -9,11 +9,11 @@ spec:
     spec:
       restartPolicy: Never
       containers:
-        - name: bootstrap
+        - name: eros-pg-bootstrap
           image: postgres:14-alpine
           env:
             - name: PGHOST
-              value: postgres
+              value: eros-postgres
             - name: PGPORT
               value: "5432"
             - name: PGUSER
@@ -33,25 +33,13 @@ spec:
               echo "Waiting for Postgres at ${PGHOST}:${PGPORT}..."
               until pg_isready -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d postgres -t 3; do sleep 2; done
 
-              echo "Checking database ${PGDATABASE}..."
+              echo "Ensuring database ${PGDATABASE} exists..."
               if ! psql -d postgres -tAc "SELECT 1 FROM pg_database WHERE datname='${PGDATABASE}'" | grep -q 1; then
-                echo "Creating database ${PGDATABASE}..."
                 psql -d postgres -v ON_ERROR_STOP=1 -c "CREATE DATABASE ${PGDATABASE};"
-
-                echo "Applying dbschema.sql..."
-                psql -d "${PGDATABASE}" -v ON_ERROR_STOP=1 -f /schema/dbschema.sql
-
-                psql -d "${PGDATABASE}" -v ON_ERROR_STOP=1 -c "
-                  CREATE SCHEMA IF NOT EXISTS bootstrap;
-                  CREATE TABLE IF NOT EXISTS bootstrap.migrations(
-                    id text primary key,
-                    applied_at timestamptz default now()
-                  );
-                  INSERT INTO bootstrap.migrations(id) VALUES ('init-001') ON CONFLICT DO NOTHING;
-                "
-              else
-                echo "Database ${PGDATABASE} already exists. Skipping."
               fi
+
+              echo "Applying exported_schema.sql (idempotent)..."
+              psql -d "${PGDATABASE}" -v ON_ERROR_STOP=1 -f /schema/dbschema.sql
 
               echo "Bootstrap done."
           volumeMounts:

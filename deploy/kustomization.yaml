@@ -24,3 +24,6 @@ configMapGenerator:
 - name: grafana-datasources
   files:
     - all.yaml=./grafana_provisioning/datasources.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true

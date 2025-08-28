@@ -22,7 +22,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: grafana
+                name: eros-grafana
                 port:
                   number: 80
     - host: catalogue.nemo.onelab.eu
@@ -32,6 +32,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: data-catalogue
+                name: eros-data-catalogue
                 port:
                   number: 80

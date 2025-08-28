@@ -1,27 +1,55 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: data-pipeline
+  name: eros-data-pipeline
   labels:
     app: eros
     type: backend
-    deployment: data-pipeline
+    deployment: eros-data-pipeline
 spec:
   replicas: 1
   selector:
     matchLabels:
-      pod: data-pipeline
+      pod: eros-data-pipeline
   template:
     metadata:
       labels:
+        pod: eros-data-pipeline
         app: eros
         type: backend
-        deployment: data-pipeline
+        deployment: eros-data-pipeline
     spec:
       imagePullSecrets:
-        - name: nemo-regcred
+        - name: marco-regcred
+      initContainers:
+      - name: wait-for-migration
+        image: postgres:14-alpine
+        env:
+          - name: PGHOST
+            value: eros-postgres
+          - name: PGPORT
+            value: "5432"
+          - name: PGUSER
+            value: admin
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-users
+                key: admin.password
+          - name: PGDATABASE
+            value: data
+        command: ["/bin/sh","-c"]
+        args:
+          - |
+            set -e
+            echo "Waiting for migration flag..."
+            until psql -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d "$PGDATABASE" -tAc \
+              "SELECT 1 FROM bootstrap.migrations WHERE id='schema-vehicle-states-typed-001'" | grep -q 1; do
+              sleep 2
+            done
+            echo "Schema ready."
       containers:
-        - name: data-pipeline
+        - name: eros-data-pipeline
           image: marcothedood/eros4nrg-demo:data-pipeline
           imagePullPolicy: Always
           ports:
@@ -31,7 +59,7 @@ spec:
             - name: MINIO_DEFAULT_BUCKETS
               value: iotdata
             - name: MINIO_ENDPOINT
-              value: minio:9000
+              value: eros-minio:9000
             - name: MINIO_PORT
               value: "9000"
             - name: MINIO_ROOT_PASSWORD
@@ -47,7 +75,7 @@ spec:
             - name: POSTGRES_DB
               value: data
             - name: POSTGRES_HOST
-              value: postgres
+              value: eros-postgres
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
