@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eros-keycloak
+  labels:
+    app: eros
+    type: backend
+    deployment: eros-keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: eros-keycloak
+  template:
+    metadata:
+      labels:
+        pod: eros-keycloak
+        app: eros
+        type: backend
+        deployment: eros-keycloak
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+      - name: eros-keycloak
+        image: quay.io/keycloak/keycloak:21.1.2
+        imagePullPolicy: Always
+        args:
+        - start
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 1000
+          runAsGroup: 1000
+        env:
+        - name: KC_HTTP_ENABLED
+          value: "true"
+        - name: KC_HTTP_RELATIVE_PATH
+          value: /keycloak/
+        - name: KC_HOSTNAME_STRICT
+          value: "false"
+        - name: KC_HOSTNAME_STRICT_HTTPS
+          value: "false"
+        - name: KC_HEALTH_ENABLED
+          value: "true"
+        - name: KEYCLOAK_ADMIN
+          valueFrom:
+            secretKeyRef:
+              name: keycloak-builtin-admin
+              key: username
+        - name: KEYCLOAK_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: keycloak-builtin-admin
+              key: password
+        ports:
+        - name: http
+          containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /keycloak/realms/master
+            port: 8080
+        volumeMounts:
+        - name: h2-volume
+          mountPath: /opt/keycloak/data/h2/
+      volumes:
+      - name: h2-volume
+        persistentVolumeClaim:
+          claimName: eros-keycloak-pvc

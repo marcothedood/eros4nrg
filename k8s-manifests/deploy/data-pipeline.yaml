@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eros-data-pipeline
+  labels:
+    app: eros
+    type: backend
+    deployment: eros-data-pipeline
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: eros-data-pipeline
+  template:
+    metadata:
+      labels:
+        pod: eros-data-pipeline
+        app: eros
+        type: backend
+        deployment: eros-data-pipeline
+    spec:
+      imagePullSecrets:
+        - name: marco-regcred
+      initContainers:
+      - name: wait-for-migration
+        image: postgres:14-alpine
+        env:
+          - name: PGHOST
+            value: eros-postgres
+          - name: PGPORT
+            value: "5432"
+          - name: PGUSER
+            value: admin
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-users
+                key: admin.password
+          - name: PGDATABASE
+            value: data
+        command: ["/bin/sh","-c"]
+        args:
+          - |
+            set -e
+            echo "Waiting for migration flag..."
+            until psql -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d "$PGDATABASE" -tAc \
+              "SELECT 1 FROM bootstrap.migrations WHERE id='schema-vehicle-states-typed-001'" | grep -q 1; do
+              sleep 2
+            done
+            echo "Schema ready."
+      containers:
+        - name: eros-data-pipeline
+          image: marcothedood/eros4nrg-demo:data-pipeline
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8002
+              protocol: TCP
+          env:
+            - name: MINIO_DEFAULT_BUCKETS
+              value: iotdata
+            - name: MINIO_ENDPOINT
+              value: eros-minio:9000
+            - name: MINIO_PORT
+              value: "9000"
+            - name: MINIO_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: minio-builtin-admin
+                  key: password
+            - name: MINIO_ROOT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: minio-builtin-admin
+                  key: username
+            - name: POSTGRES_DB
+              value: data
+            - name: POSTGRES_HOST
+              value: eros-postgres
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-users
+                  key: admin.password
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_USER
+              value: admin

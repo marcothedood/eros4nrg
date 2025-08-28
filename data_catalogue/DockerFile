@@ -1,0 +1,24 @@
+#
+FROM python:3.11.2
+
+#
+WORKDIR /EROS4NRG
+
+COPY ./data_catalogue/requirements.txt .
+
+#
+RUN pip install --no-cache-dir -r requirements.txt
+
+ENV PYTHONPATH="${PYTHONPATH}:/EROS4NRG"
+
+# Copy python scripts
+COPY ./config config/
+COPY ./data_catalogue/ data_catalogue/
+
+# Change permission for bash script
+RUN chmod 744 data_catalogue/fast_api.py
+
+#
+CMD ["uvicorn", "data_catalogue.fast_api:app", "--host", "0.0.0.0", "--port", "8003"]
+
+

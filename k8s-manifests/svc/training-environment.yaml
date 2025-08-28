@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: eros-training-environment
+  labels:
+    app: eros
+    type: backend
+    service: eros-training-environment
+spec:
+  selector:
+    pod: eros-training-environment
+    app: eros
+    type: backend
+    deployment: eros-training-environment
+  ports:
+    - name: eros-training-environment
+      port: 8004
+      targetPort: 8004
+  type: ClusterIP

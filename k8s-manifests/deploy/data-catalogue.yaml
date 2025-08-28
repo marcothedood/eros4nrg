@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eros-data-catalogue
+  labels:
+    app: eros
+    type: frontend
+    deployment: eros-data-catalogue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: eros-data-catalogue
+  template:
+    metadata:
+      labels:
+        pod: eros-data-catalogue
+        app: eros
+        type: frontend
+        deployment: eros-data-catalogue
+    spec:
+      imagePullSecrets:
+        - name: marco-regcred
+      containers:
+        - name: eros-data-catalogue
+          image: marcothedood/eros4nrg-demo:data-catalogue-v1.6
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8003
+              protocol: TCP
+          env:
+            - name: POSTGRES_DB
+              value: data
+            - name: POSTGRES_HOST
+              value: eros-postgres
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_USER
+              value: admin
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-users
+                  key: admin.password

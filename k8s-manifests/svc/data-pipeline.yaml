@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: eros-data-pipeline
+  labels:
+    app: eros
+    type: backend
+    service: eros-data-pipeline
+spec:
+  selector:
+    pod: eros-data-pipeline
+    app: eros
+    type: backend
+    deployment: eros-data-pipeline
+  ports:
+    - name: http
+      port: 8002
+      targetPort: 8002
+  type: ClusterIP

@@ -1,0 +1,23 @@
+#
+FROM python:3.11.2
+
+#
+WORKDIR /EROS4NRG
+
+COPY ./data_pipeline/requirements.txt .
+
+#
+RUN pip install --no-cache-dir -r requirements.txt
+
+ENV PYTHONPATH="${PYTHONPATH}:/EROS4NRG"
+
+# Copy python scripts
+COPY ./config config/
+COPY ./clients clients/
+COPY ./data_pipeline/ data_pipeline/
+
+# Change permission for bash script
+RUN chmod 744 data_pipeline/data_reader.py
+
+#
+CMD ["python", "data_pipeline/data_reader.py"]

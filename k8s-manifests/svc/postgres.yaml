@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: eros-postgres
+  labels:
+    app: eros
+    type: backend
+    service: eros-postgres
+spec:
+  selector:
+    pod: eros-postgres
+    app: eros
+    type: backend
+    deployment: eros-postgres
+  ports:
+    - name: eros-postgres
+      port: 5432
+      targetPort: 5432
+  type: ClusterIP

@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eros-iot-stream
+  labels:
+    app: eros
+    type: backend
+    deployment: eros-iot-stream
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      pod: eros-iot-stream
+  template:
+    metadata:
+      labels:
+        pod: eros-iot-stream
+        app: eros
+        type: backend
+        deployment: eros-iot-stream
+    spec:
+      imagePullSecrets:
+        - name: marco-regcred
+      containers:
+        - name: eros-iot-stream
+          image: marcothedood/eros4nrg-demo:iot-stream
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+          env:
+            - name: MINIO_DEFAULT_BUCKETS
+              value: iotdata
+            - name: MINIO_ENDPOINT
+              value: minio:9000
+            - name: MINIO_PORT
+              value: "9000"
+            - name: MINIO_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: minio-builtin-admin
+                  key: password
+            - name: MINIO_ROOT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: minio-builtin-admin
+                  key: username

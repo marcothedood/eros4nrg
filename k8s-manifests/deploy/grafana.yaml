@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eros-grafana
+  labels:
+    app: eros
+    type: frontend
+    deployment: eros-grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: eros-grafana
+  template:
+    metadata:
+      labels:
+        pod: eros-grafana
+        app: eros
+        type: frontend
+        deployment: eros-grafana
+    spec:
+      containers:
+        - name: eros-grafana
+          image: docker.io/bitnami/grafana:9.2.2
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+          env:
+            - name: GF_SECURITY_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-builtin-admin
+                  key: password
+          volumeMounts:
+            - name: emotion
+              mountPath: /opt/bitnami/grafana/data/custom_dashboards/emotion.json
+              subPath: emotion.json
+            - name: asm-terni
+              mountPath: /opt/bitnami/grafana/data/custom_dashboards/asm_terni.json
+              subPath: asm_terni.json
+            - name: grafana-dashboards
+              mountPath: /opt/bitnami/grafana/conf/provisioning/dashboards/all.yaml
+              subPath: all.yaml
+            - name: grafana-datasources
+              mountPath: /opt/bitnami/grafana/conf/provisioning/datasources/all.yaml
+              subPath: all.yaml
+      volumes:
+        - name: emotion
+          configMap:
+            name: grafana-emotion-dashboard
+        - name: asm-terni
+          configMap:
+            name: grafana-asm-terni-dashboard
+        - name: grafana-dashboards
+          configMap:
+            name: grafana-dashboards
+        - name: grafana-datasources
+          configMap:
+            name: grafana-datasources
+
+# /opt/bitnami/grafana/conf/provisioning/dashboards
+
+# /opt/bitnami/grafana/conf/provisioning/datasources

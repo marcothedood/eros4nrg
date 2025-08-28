@@ -1,0 +1,52 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: eros-pg-bootstrap
+spec:
+  backoffLimit: 0
+  ttlSecondsAfterFinished: 180
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: eros-pg-bootstrap
+          image: postgres:14-alpine
+          env:
+            - name: PGHOST
+              value: eros-postgres
+            - name: PGPORT
+              value: "5432"
+            - name: PGUSER
+              value: admin
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-users
+                  key: admin.password
+            - name: PGDATABASE
+              value: data
+          command: ["/bin/sh","-c"]
+          args:
+            - |
+              set -euo pipefail
+
+              echo "Waiting for Postgres at ${PGHOST}:${PGPORT}..."
+              until pg_isready -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d postgres -t 3; do sleep 2; done
+
+              echo "Ensuring database ${PGDATABASE} exists..."
+              if ! psql -d postgres -tAc "SELECT 1 FROM pg_database WHERE datname='${PGDATABASE}'" | grep -q 1; then
+                psql -d postgres -v ON_ERROR_STOP=1 -c "CREATE DATABASE ${PGDATABASE};"
+              fi
+
+              echo "Applying exported_schema.sql (idempotent)..."
+              psql -d "${PGDATABASE}" -v ON_ERROR_STOP=1 -f /schema/dbschema.sql
+
+              echo "Bootstrap done."
+          volumeMounts:
+            - name: schema
+              mountPath: /schema/dbschema.sql
+              subPath: dbschema.sql
+      volumes:
+        - name: schema
+          configMap:
+            name: pg-schema
