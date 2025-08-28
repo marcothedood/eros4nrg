@@ -138,4 +138,4 @@ dmypy.json
 docker.yaml
 data-db-dump/
 grafana_backup/*
-iot_streams/
+iot_streams/ip_protected

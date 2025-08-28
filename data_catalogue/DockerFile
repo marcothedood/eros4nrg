@@ -20,3 +20,5 @@ RUN chmod 744 data_catalogue/fast_api.py
 
 #
 CMD ["uvicorn", "data_catalogue.fast_api:app", "--host", "0.0.0.0", "--port", "8003"]
+
+
