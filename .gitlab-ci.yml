@@ -24,15 +24,13 @@ build:data-pipeline:
     CONTEXT: "data_pipeline"
     DOCKERFILE: "data_pipeline/Dockerfile"
 
-
-# Image will be buildable only after ASM Terni disclosure
-# build:iot_streams:
-#   stage: build
-#   extends: .buildkit
-#   variables:
-#     CI_REGISTRY_IMAGE: "nemometaos/iot_streams"
-#     CONTEXT: "iot_streams"
-#     DOCKERFILE: "iot_streams/Dockerfile"
+build:iot_streams:
+  stage: build
+  extends: .buildkit
+  variables:
+    CI_REGISTRY_IMAGE: "nemometaos/iot-streams"
+    CONTEXT: "iot_streams"
+    DOCKERFILE: "iot_streams/Dockerfile"
 
 build:training-environment:
   stage: build

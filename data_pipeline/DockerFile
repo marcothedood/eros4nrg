@@ -14,7 +14,6 @@ COPY ./config config/
 COPY ./clients clients/
 COPY ./data_pipeline/ data_pipeline/
 
-# Il file è Python, i permessi non servono, ma li lascio innocui
 RUN chmod 744 data_pipeline/data_reader.py
 
 CMD ["python", "data_pipeline/data_reader.py"]
