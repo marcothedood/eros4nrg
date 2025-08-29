@@ -12,38 +12,37 @@ build:data-catalogue:
   stage: build
   extends: .buildkit
   variables:
-    CI_REGISTRY_IMAGE: "nemometaos/data-catalogue"
-    CONTEXT: "data_catalogue"
-    DOCKERFILE: "data_catalogue/Dockerfile"
+    CI_REGISTRY_IMAGE: "docker.io/nemometaos/data-catalogue"   # o la tua registry
+    BUILD_CONTEXT: "data_catalogue"
+    BUILD_CONTEXT_CHANGE: "data_catalogue"
 
 build:data-pipeline:
   stage: build
   extends: .buildkit
   variables:
-    CI_REGISTRY_IMAGE: "nemometaos/data-pipeline"
-    CONTEXT: "data_pipeline"
-    DOCKERFILE: "data_pipeline/Dockerfile"
+    CI_REGISTRY_IMAGE: "docker.io/nemometaos/data-pipeline"
+    BUILD_CONTEXT: "data_pipeline"
+    BUILD_CONTEXT_CHANGE: "data_pipeline"
 
 build:iot_streams:
   stage: build
   extends: .buildkit
   variables:
-    CI_REGISTRY_IMAGE: "nemometaos/iot-streams"
-    CONTEXT: "iot_streams"
-    DOCKERFILE: "iot_streams/Dockerfile"
+    CI_REGISTRY_IMAGE: "docker.io/nemometaos/iot-streams"
+    BUILD_CONTEXT: "iot_streams"
+    BUILD_CONTEXT_CHANGE: "iot_streams"
 
 build:training-environment:
   stage: build
   extends: .buildkit
   variables:
-    CI_REGISTRY_IMAGE: "nemometaos/training-environment"
-    CONTEXT: "training_environment"
-    DOCKERFILE: "training_environment/Dockerfile"
+    CI_REGISTRY_IMAGE: "docker.io/nemometaos/training-environment"
+    BUILD_CONTEXT: "training_environment"
+    BUILD_CONTEXT_CHANGE: "training_environment"
 
 unit-test:
   stage: test
   script:
     - echo "Running unit tests... This will take about 10 seconds."
-    # - docker run $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA /script/to/run/tests
     - sleep 10
     - echo "Tests passed succesfully!"
