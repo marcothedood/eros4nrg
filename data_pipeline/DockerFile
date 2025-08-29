@@ -1,23 +1,20 @@
-#
 FROM python:3.11.2
 
-#
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
+
 WORKDIR /EROS4NRG
 
 COPY ./data_pipeline/requirements.txt .
-
-#
 RUN pip install --no-cache-dir -r requirements.txt
 
-ENV PYTHONPATH="${PYTHONPATH}:/EROS4NRG"
+ENV PYTHONPATH="/EROS4NRG:${PYTHONPATH}"
 
-# Copy python scripts
 COPY ./config config/
 COPY ./clients clients/
 COPY ./data_pipeline/ data_pipeline/
 
-# Change permission for bash script
+# Il file è Python, i permessi non servono, ma li lascio innocui
 RUN chmod 744 data_pipeline/data_reader.py
 
-#
 CMD ["python", "data_pipeline/data_reader.py"]

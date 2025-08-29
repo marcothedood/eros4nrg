@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: eros-minio
   labels:
-    app: eros-minio
+    app: eros
     type: backend
     deployment: eros-minio
 spec:

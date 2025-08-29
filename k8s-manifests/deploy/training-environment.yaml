@@ -23,7 +23,7 @@ spec:
         - name: marco-regcred
       containers:
         - name: eros-training-environment
-          image: marcothedood/eros4nrg-demo:training-environment
+          image: marcothedood/eros4nrg-demo:training-environment-v1.2
           imagePullPolicy: Always
           ports:
             - containerPort: 8004
@@ -32,7 +32,7 @@ spec:
             - name: POSTGRES_DB
               value: data
             - name: POSTGRES_HOST
-              value: postgres
+              value: eros-postgres
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:

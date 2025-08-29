@@ -3,4 +3,4 @@
   folder: ''
   type: 'file'
   options:
-    folder: '/opt/bitnami/grafana/data/custom_dashboards/'
+    path: /opt/bitnami/grafana/data/custom_dashboards/

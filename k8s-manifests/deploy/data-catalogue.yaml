@@ -23,20 +23,20 @@ spec:
         - name: marco-regcred
       containers:
         - name: eros-data-catalogue
-          image: marcothedood/eros4nrg-demo:data-catalogue-v1.6
+          image: marcothedood/eros4nrg-demo:data-catalogue-v1.7
           imagePullPolicy: Always
           ports:
             - containerPort: 8003
               protocol: TCP
           env:
             - name: POSTGRES_DB
-              value: data
+              value: "data"
             - name: POSTGRES_HOST
-              value: eros-postgres
+              value: "eros-postgres"
             - name: POSTGRES_PORT
               value: "5432"
             - name: POSTGRES_USER
-              value: admin
+              value: "admin"
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:

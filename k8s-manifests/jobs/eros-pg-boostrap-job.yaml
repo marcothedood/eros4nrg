@@ -1,0 +1,55 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: eros-pg-boostrap-job
+spec:
+  backoffLimit: 0
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: bootstrap
+          image: postgres:14-alpine
+          env:
+            - name: PGHOST
+              value: eros-postgres
+            - name: PGPORT
+              value: "5432"
+            - name: PGUSER
+              value: admin
+            - name: PGDATABASE
+              value: data
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-users
+                  key: admin.password
+            - name: PGOPTIONS
+              value: "-c search_path=public,bootstrap"
+          command: ["/bin/sh","-c"]
+          args:
+            - |
+              set -euo pipefail
+
+              echo "[wait] Waiting for Postgres at ${PGHOST}:${PGPORT}..."
+              until pg_isready -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d postgres -t 3; do sleep 2; done
+
+              echo "[db] Ensuring database '${PGDATABASE}' exists..."
+              if ! psql -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d postgres -tAc "SELECT 1 FROM pg_database WHERE datname='${PGDATABASE}'" | grep -q 1; then
+                createdb -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" "$PGDATABASE"
+              fi
+
+              echo "[schema] Applying SQL files in order ..."
+              for f in $(ls -1 /schema/*.sql | sort); do
+                echo ">> applying $f"
+                psql -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d "$PGDATABASE" -v ON_ERROR_STOP=1 -f "$f"
+              done
+              echo "[done] Bootstrap complete."
+          volumeMounts:
+            - name: schema
+              mountPath: /schema
+      volumes:
+        - name: schema
+          configMap:
+            name: eros-pg-schema

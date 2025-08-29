@@ -44,22 +44,22 @@ spec:
             set -e
             echo "Waiting for migration flag..."
             until psql -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d "$PGDATABASE" -tAc \
-              "SELECT 1 FROM bootstrap.migrations WHERE id='schema-vehicle-states-typed-001'" | grep -q 1; do
+              "SELECT 1 FROM bootstrap.migrations WHERE id='schema-core-v1'" | grep -q 1; do
               sleep 2
             done
             echo "Schema ready."
       containers:
         - name: eros-data-pipeline
-          image: marcothedood/eros4nrg-demo:data-pipeline
+          image: marcothedood/eros4nrg-demo:data-pipeline-v8
           imagePullPolicy: Always
           ports:
             - containerPort: 8002
               protocol: TCP
           env:
             - name: MINIO_DEFAULT_BUCKETS
-              value: iotdata
+              value: "iotdata"
             - name: MINIO_ENDPOINT
-              value: eros-minio:9000
+              value: "eros-minio:9000"
             - name: MINIO_PORT
               value: "9000"
             - name: MINIO_ROOT_PASSWORD
@@ -73,9 +73,9 @@ spec:
                   name: minio-builtin-admin
                   key: username
             - name: POSTGRES_DB
-              value: data
+              value: "data"
             - name: POSTGRES_HOST
-              value: eros-postgres
+              value: "eros-postgres"
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -84,4 +84,4 @@ spec:
             - name: POSTGRES_PORT
               value: "5432"
             - name: POSTGRES_USER
-              value: admin
+              value: "admin"

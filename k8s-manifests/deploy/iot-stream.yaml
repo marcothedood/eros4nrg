@@ -7,7 +7,7 @@ metadata:
     type: backend
     deployment: eros-iot-stream
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       pod: eros-iot-stream
@@ -23,16 +23,18 @@ spec:
         - name: marco-regcred
       containers:
         - name: eros-iot-stream
-          image: marcothedood/eros4nrg-demo:iot-stream
+          image: marcothedood/eros4nrg-demo:iot-streams-noasm-v1.9
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
               protocol: TCP
           env:
+            - name: DEBUG
+              value: "1"
             - name: MINIO_DEFAULT_BUCKETS
-              value: iotdata
+              value: "iotdata"
             - name: MINIO_ENDPOINT
-              value: minio:9000
+              value: "eros-minio:9000"
             - name: MINIO_PORT
               value: "9000"
             - name: MINIO_ROOT_PASSWORD
