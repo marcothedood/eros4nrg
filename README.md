@@ -420,7 +420,7 @@ For EROS4NRG, each component (e.g., data-catalogue, data-pipeline, grafana) has 
 
 Example manifest for the data-catalogue component:
 
-```
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -473,7 +473,7 @@ Each component that needs to be exposed externally must define an Ingress resour
 
 Example ingress for the data-catalogue component:
 
-```
+```yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
