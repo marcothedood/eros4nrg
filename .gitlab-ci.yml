@@ -12,7 +12,7 @@ build:data-catalogue:
   stage: build
   extends: .buildkit
   variables:
-    CI_REGISTRY_IMAGE: "docker.io/nemometaos/data-catalogue"   # o la tua registry
+    CI_REGISTRY_IMAGE: "docker.io/nemometaos/data-catalogue"
     BUILD_CONTEXT: "data_catalogue"
     BUILD_CONTEXT_CHANGE: "data_catalogue"
 
