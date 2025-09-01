@@ -10,10 +10,10 @@ spec:
   tls:
     - hosts:
         - grafana.nemo.onelab.eu
-      secretName: grafana-tls
+      secretName: eros-grafana-tls
     - hosts:
         - catalogue.nemo.onelab.eu
-      secretName: data-catalogue-tls
+      secretName: eros-data-catalogue-tls
   rules:
     - host: grafana.nemo.onelab.eu
       http:

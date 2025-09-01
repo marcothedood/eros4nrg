@@ -38,12 +38,12 @@ spec:
             - name: MINIO_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: minio-builtin-admin
+                  name: eros-minio-builtin-admin
                   key: password
             - name: MINIO_ROOT_USER
               valueFrom:
                 secretKeyRef:
-                  name: minio-builtin-admin
+                  name: eros-minio-builtin-admin
                   key: username
           volumeMounts:
             - name: iotdata

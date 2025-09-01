@@ -29,7 +29,7 @@ spec:
             - name: GF_SECURITY_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: grafana-builtin-admin
+                  name: eros-grafana-builtin-admin
                   key: password
           volumeMounts:
             - name: emotion

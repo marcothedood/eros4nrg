@@ -23,7 +23,7 @@ spec:
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgres-users
+                  name: eros-postgres-users
                   key: admin.password
             - name: PGOPTIONS
               value: "-c search_path=public,bootstrap"

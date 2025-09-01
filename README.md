@@ -4,19 +4,27 @@ The files in this folder, feature a modular, Kubernetes data platform designed f
 
 The architecture is built around microservices deployed using Kustomize, enabling granular control over each component and its dependencies.
 
-![Alt text](/images/EROS4NRG-architecture.svg)
+![Alt text](images/EROS4NRG-architecture.svg)
 
 The platform is composed of the following core modules:
 
 *   **IoT Stream**: Captures live data from APIs or databases and loads it into a data lake.
+
+![alt text](images/iot-streams-logs.png)
     
 *   **Data Pipeline**: Transforms and restructures raw data into metadata and data tables, storing the result in PostgreSQL.
+
+![alt text](images/data-pipeline-logs.png)
     
 *   **Data Catalogue**: A FastAPI-based microservice to expose structured data via a REST API.
+
+![alt text](images/data-catalogue.png)
     
 *   **Predictive Analysis**: Offers forecasting capabilities using Facebook Prophet, MLP, and CatBoost.
     
 *   **Keycloak**: Secures access with centralized identity and access management.
+
+![alt text](images/keycloak.png)
     
 
 📚 Table of Contents
@@ -92,82 +100,54 @@ k8s/
 ```
 
 
-### Deployment Order
+### Deployment
 
-When using Kustomize overlays, deploying the root `kustomization.yaml` file will do the magic.
-Kustomize will sort and organize the resources in the correct order for you.
+There are 3 ways for deploying.
+
+1. Automatically, with FluxCD
+2. Through Kustomize
+3. Manually, with kubectl apply 
+
 Hereafter, you can find the order if you prefer to proceed manual, piece meal.
 
-1.  **Namespace**
+    
+1.  **Persistent Volumes**
 
-2.   **Storage Class**
+2. **Secrets**
     
-3.  **Persistent Volumes**
+3.  **PostgreSQL**
+    
+4.  **Keycloak**
 
-4. **Secrets**
+5.  **Grafana**
     
-5.  **PostgreSQL**
+6.  **IoT Stream**
     
-6.  **Keycloak**
+7.  **Data Pipeline**
+    
+8.  **Data Catalogue**
+    
+9.  **training-environment**  # Predictive Analysis
 
-7.  **Grafana**
-    
-8.  **IoT Stream**
-    
-9.  **Data Pipeline**
-    
-10.  **Data Catalogue**
-    
-11.  **training-environment**  # Predictive Analysis
+10. **IngressClass** (if not already created)
 
-12. **IngressClass**
-
-13. **Ingress**
+11. **Ingress**
 
 
 
 # Installation
-
-> **Prerequisites**:
-> 
-> *   AWS EKS cluster configured and accessible via kubectl
->     
-> *   kubectl and kustomize installed
->     
-> *   IAM roles, EBS CSI driver, and necessary AWS permissions in place.
->
-> As part of the AWS setup, we created dedicated IAM entities (roles, policies, and service accounts) to grant the required permissions for each component running in the EKS cluster.
->Where possible, IRSA (IAM Roles for Service Accounts) has been leveraged, ensuring that pods only receive the exact permissions they need without relying on node-level IAM roles.
->This improves security, auditability, and follows AWS best practices.
->     
-
-For more information concerning the AWS K8s exposure, please visit the [AWS official Docs](https://aws.amazon.com/blogs/containers/exposing-kubernetes-applications-part-1-service-and-ingress-resources/) 
-
 
 The manual installation can be done using the usual `kubectl apply -f filename.yaml`.
 
 
 ### 1\. Clone the Repository
 
-`$ git clone https://github.com/martel-innovate/eros4nrg-k8s.git`
+`$ git clone https://gitlab.eclipse.org/eclipse-research-labs/nemo-project/opencall-1/eros4nrg/eros4nrg-k8s.git`
 
-For the Kustomize deployment, just `cd` into the cloned repo and issue `kubectl apply -k kustomization.yaml` while for the manual installation, follow the steps below:
-
-
-### 2\. Deploy the Namespace and StorageClass
-
-`   kubectl apply -k namespace/   ` or `   kubectl apply -f namespace/nemo.yaml   `
-
-`   kubectl apply -k storageclass/   ` or `   kubectl apply -f storageclass/aws-sc.yaml   `
-
-This step sets up:
-
-*   nemo namespace
-    
-*   EBS-backed StorageClass
+For the Kustomize deployment, just `cd` into the k8s-manifests dir and issue `kubectl apply -k .` while for the manual installation, follow the steps below:
     
 
-### 3\. Apply Persistent Volume Claims
+### 2\. Apply Persistent Volume Claims
 
 `   kubectl apply -k pvcs/` or `   kubectl apply -f pvcs/[filename].yaml   `
 
@@ -200,7 +180,7 @@ Example:
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: nemo
+namespace: nemo-svc
 
 resources:
 - deploy/
@@ -274,6 +254,7 @@ If you have historical data to import, there are several ways for doing that:
 1. Use `kubectl cp` to copy the .sql or .dump file into the postgres pod
 2. Mount the file on the postgres volume.
 3. Mount the file using ConfigMaps.
+4. Port-forward the pod and issue psql commands manually. (`psql -h 127.0.0.1 -U user -d database < databasedump.sql`)
 
 Whatever choice you make, once the file is uploaded, get a shell into the pod
 
@@ -298,25 +279,23 @@ All components are deployed under the nemo namespace:
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: nemo
+  name: nemo-svc
 ```
 
-### 2\. **Storage Class (EBS)**
+### 2\. **Storage Class**
 
-A dynamic storage class is configured to provision EBS volumes for stateful services like PostgreSQL:
+NEMO already has StorageClasses configured, so we're using the default one since no particular or specific info were provided:
+
+```bash
+NAME                        PROVISIONER                     RECLAIMPOLICY   VOLUMEBINDINGMODE   ALLOWVOLUMEEXPANSION   AGE
+rook-ceph-block (default)   rook-ceph.rbd.csi.ceph.com      Delete          Immediate           true                   200d
+rook-ceph-bucket            rook-ceph.ceph.rook.io/bucket   Retain          Immediate           false                  194d
+rook-cephfs                 rook-ceph.cephfs.csi.ceph.com   Delete          Immediate           true                   198d
+```
+
 
 ```yaml
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: ebs-auto-sc
-provisioner: ebs.csi.eks.amazonaws.com
-volumeBindingMode: WaitForFirstConsumer
-parameters:
-  type: gp2
-  fsType: ext4
-  encrypted: "true"
-allowVolumeExpansion: true
+storageClassName: rook-ceph-block
 ```
 
 ### 3\. **Secrets & Environment Variables**
@@ -324,20 +303,20 @@ allowVolumeExpansion: true
 *   Database credentials, Service account's pwds, and Keycloak secrets and Docker pvt registry token should be provided using Kubernetes **Secrets**.
     
 *   Each deployment file may include envFrom or env definitions to inject config into pods.
-    
+
+```bash
+NAME                                       TYPE                             DATA   AGE
+eros-data-catalogue-tls                    kubernetes.io/tls                2      81s
+eros-eros-grafana-builtin-admin            Opaque                           1      3m32s
+eros-eros-keycloak-builtin-admin           Opaque                           2      3m32s
+eros-eros-minio-builtin-admin              Opaque                           2      3m32s
+eros-eros-postgres-users                   Opaque                           1      3m32s
+eros-grafana-tls-clqpz                     Opaque                           1      84s
+```
 
 ### 4\. **Ingress & Service Exposure**
 
-In this deployment we rely on the **AWS Application Load Balancer (ALB) Ingress Controller**, which automatically provisions an ALB and configures it to expose Kubernetes services to the outside world.
-The ALB handles:
-
-- HTTP/HTTPS termination (with support for AWS ACM-managed SSL certificates).
-
-- Path and host-based routing to backend services (e.g., Grafana, Data Catalogue).
-
-- Integration with AWS security groups and IAM for fine-grained access control.
-
-**If you deploy this stack outside AWS, make sure to replace the ALB Ingress Controller with a different implementation (e.g., NGINX Ingress Controller) and adapt the annotations accordingly.**
+In this deployment we rely on the `ingressClassName: "nginx"` and `cert-manager.io/cluster-issuer: "letsencrypt-production"` provided by NEMO.
 
 Our Ingress exposes `grafana` and `data catalogue` (FastAPI).
 
@@ -352,8 +331,6 @@ imagePullSecrets:
         - name: marco-regcred
 ```
 in our deployments. 
-
-Make sure you replace that with your own image pull secret.
 
 ### ⚠️ Each image should:
 
@@ -415,8 +392,7 @@ This configuration ensures that:
 
 ## Deployment via FluxCD
 
-NEMO uses FluxCD to automatically deploy Kubernetes manifests stored in Git.
-For EROS4NRG, each component (e.g., data-catalogue, data-pipeline, grafana) has its own manifest in the deploy/ directory.
+NEMO uses FluxCD to automatically deploy Kubernetes manifests stored in Git. For EROS4NRG, each component (e.g., data-catalogue, data-pipeline, grafana) has its own manifest in the deploy/ directory.
 
 Example manifest for the data-catalogue component:
 
@@ -463,9 +439,13 @@ spec:
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgres-users
+                  name: eros-postgres-users
                   key: admin.password
 ```
+
+The EROS4NRG components stand in the `nemo-svc` namespace, up and running:
+
+![alt text](images/k9s-nemo.png)
 
 ## Ingress Configuration
 

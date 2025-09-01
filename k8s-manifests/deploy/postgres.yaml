@@ -30,7 +30,7 @@ spec:
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: postgres-users
+              name: eros-postgres-users
               key: admin.password
         - name: POSTGRES_USER
           value: admin
