@@ -191,7 +191,7 @@ $ kubectl apply -f svc/postgres.yaml
 
 Whether you'd like to deploy pieces of infrastructure using Kustomize, you can create a new kustomization.yaml file at the repo's root (replacing the default one which is complete -- can be done issuing `mv kustomization.yaml kustomization.yaml.bak && touch kustomization.yaml`) and tweak the newly created file as per your needs.
 
-```
+```yaml
 Example:
 #################################################
 ##### Deploy PostgreSQL Deploy + svc + PVC: #####
@@ -213,7 +213,7 @@ And in each kustomization file in sub-folders we'll add/remove the required reso
 
 ### Example (pvcs/kustomization.yaml)
 
-```
+```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
@@ -223,7 +223,7 @@ resources:
 
 ### Example (svc/kustomization.yaml)
 
-```
+```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
@@ -233,7 +233,7 @@ resources:
 
 ### Example (deploy/kustomization.yaml)
 
-```
+```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
@@ -305,7 +305,7 @@ metadata:
 
 A dynamic storage class is configured to provision EBS volumes for stateful services like PostgreSQL:
 
-```
+```yaml
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -347,7 +347,7 @@ Our Ingress exposes `grafana` and `data catalogue` (FastAPI).
 Each component is containerized and should be built and pushed to a container registry (e.g., ECR, Docker Hub).
 Note that those images (in our scenario) are hosted on a private registry and this is why we use 
 
-```
+```yaml
 imagePullSecrets:
         - name: marco-regcred
 ```
