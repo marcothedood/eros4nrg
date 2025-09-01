@@ -32,6 +32,8 @@ The platform is composed of the following core modules:
     
 5.  [Docker Images](#Docker-Images)
 
+6. [Nemo Integration](#Nemo-Intergration)
+
 
 # Project-Structure
 
@@ -361,3 +363,162 @@ Make sure you replace that with your own image pull secret.
 *   Use minimal base images with specific versions (not latest)
     
 *   Be secured with non-root users where possible
+
+
+# Nemo-Integration
+
+This project integrates with the [NEMO platform](https://gitlab.eclipse.org/eclipse-research-labs/nemo-project/nemo) following the same CI/CD and deployment approach described in the official [CI/CD Integration guide](https://gitlab.eclipse.org/eclipse-research-labs/nemo-project/nemo/-/blob/main/CI-CD%20Integration.md).
+
+## CI/CD Integration
+
+The CI/CD pipeline builds Docker images for each component of the EROS4NRG platform and pushes them to the NEMO private container registry.  
+The pipeline configuration is aligned with the NEMO templates, ensuring consistency across projects.
+
+Example pipeline configuration:
+
+```yaml
+include:
+  - project: 'eclipsefdn/it/releng/gitlab-runner-service/gitlab-ci-templates'
+    file: 'jobs/buildkit.gitlab-ci.yml'
+  - project: 'eclipsefdn/it/releng/gitlab-runner-service/gitlab-ci-templates'
+    file: 'pipeline-autodevops.gitlab-ci.yml'
+
+stages:
+  - build
+  - test
+
+variables:
+  CI_REGISTRY_IMAGE: nemometaos/data-catalogue
+
+buildkit:
+  extends: .buildkit
+
+unit-test:
+  stage: test
+  script:
+    - echo "Running unit tests..."
+    - sleep 10
+    - echo "Tests passed successfully!"
+```
+
+In our case, since our repo is multi-image, we tweaked the gitlab-ci.yml file to include the dockerfiles in the build stage:
+
+![gitlab-ci.yml file multi image](images/gitlab-ci.png)
+
+This configuration ensures that:
+
+- Docker images are built using BuildKit.
+
+- Images are uploaded to the NEMO registry under the namespace `nemometaos/`<component>.
+
+- Tests can be added before pushing images.
+
+## Deployment via FluxCD
+
+NEMO uses FluxCD to automatically deploy Kubernetes manifests stored in Git.
+For EROS4NRG, each component (e.g., data-catalogue, data-pipeline, grafana) has its own manifest in the deploy/ directory.
+
+Example manifest for the data-catalogue component:
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eros-data-catalogue
+  labels:
+    app: eros
+    type: frontend
+    deployment: eros-data-catalogue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: eros-data-catalogue
+  template:
+    metadata:
+      labels:
+        pod: eros-data-catalogue
+        app: eros
+        type: frontend
+        deployment: eros-data-catalogue
+    spec:
+      imagePullSecrets:
+        - name: nemo-regcred
+      containers:
+        - name: eros-data-catalogue
+          image: nemometaos/data-catalogue:v1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8003
+              protocol: TCP
+          env:
+            - name: POSTGRES_DB
+              value: "data"
+            - name: POSTGRES_HOST
+              value: "eros-postgres"
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_USER
+              value: "admin"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-users
+                  key: admin.password
+```
+
+## Ingress Configuration
+
+Each component that needs to be exposed externally must define an Ingress resource. The NEMO cluster uses a centralized ingress controller, and the ingress rules must follow the shared host/path conventions.
+
+Example ingress for the data-catalogue component:
+
+```
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: eros-ingress
+  namespace: nemo-svc
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-production"
+spec:
+  ingressClassName: "nginx"
+  tls:
+    - hosts:
+        - grafana.nemo.onelab.eu
+      secretName: grafana-tls
+    - hosts:
+        - catalogue.nemo.onelab.eu
+      secretName: data-catalogue-tls
+  rules:
+    - host: grafana.nemo.onelab.eu
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: eros-grafana
+                port:
+                  number: 80
+    - host: catalogue.nemo.onelab.eu
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: eros-data-catalogue
+                port:
+                  number: 80
+```
+
+## Summary
+
+- CI/CD builds and pushes images to the NEMO registry.
+
+- FluxCD deploys Kubernetes manifests stored in Git.
+
+The data-catalogue component is used here as an example of how the integration is applied.
+
+This ensures EROS4NRG components are fully integrated with the NEMO ecosystem.
