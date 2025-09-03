@@ -1,0 +1,19 @@
+FROM python:3.11.2
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
+
+WORKDIR /EROS4NRG
+
+COPY ./data_pipeline/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+ENV PYTHONPATH="/EROS4NRG:${PYTHONPATH}"
+
+COPY ./config config/
+COPY ./clients clients/
+COPY ./data_pipeline/ data_pipeline/
+
+RUN chmod 744 data_pipeline/data_reader.py
+
+CMD ["python", "data_pipeline/data_reader.py"]

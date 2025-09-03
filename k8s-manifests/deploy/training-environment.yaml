@@ -7,7 +7,7 @@ metadata:
     type: backend
     deployment: eros-training-environment
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       pod: eros-training-environment
@@ -20,10 +20,10 @@ spec:
         deployment: eros-training-environment
     spec:
       imagePullSecrets:
-        - name: marco-regcred
+        - name: nemo-regcred
       containers:
         - name: eros-training-environment
-          image: marcothedood/eros4nrg-demo:training-environment-v1.2
+          image: nemometaos/eros-training-environment
           imagePullPolicy: Always
           ports:
             - containerPort: 8004

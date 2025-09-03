@@ -16,4 +16,4 @@ spec:
     - name: http
       port: 80
       targetPort: 8003
-  type: ClusterIP
+  type: ClusterIPdeployment.

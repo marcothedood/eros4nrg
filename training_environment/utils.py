@@ -21,9 +21,13 @@ def train_detector(df, column_names):
 
 
 def get_vehicle_ids():
-    return dp_utils.get_table(columns=["vehicle"], table_name="vehicle")[
-        "vehicle"
-    ].values
+    db_output = dp_utils.get_table(columns=["vehicle"], table_name="vehicle")
+    if db_output.empty:
+        Exception(
+            "No vehicle ids found in the database. Please check the vehicle table."
+        )
+    print(f"{db_output.shape[0]} vehicle ids found in the database.")
+    return db_output["vehicle"].values
 
 
 def butter_lowpass_filter(data, cutoff, fs, order, column_name):
@@ -75,19 +79,25 @@ def check_retrain_model(script_start_date, current_date):
 
 
 def train_predictions(model, model_filename, current_data, column_name, retrain_model):
-    lag_step = 12
+    lag_step = 1
     max_lag = 1500
+    print(f"Len of current data: {len(current_data)}")
     if len(current_data) < max_lag:
+        print(f"Not enough data to train model {model_filename} for column {column_name}.")
         return model, 0, []
 
     for i in range(1, (max_lag * lag_step) + 1, lag_step):
         current_data[f"{column_name}_lag_{i}"] = current_data[column_name].shift(i)
 
+    print(f"null values in current_data: {current_data.isnull().sum()}")
+    print(f"current data example:\n{current_data.head()}")
     current_data.dropna(inplace=True)
 
     if current_data.empty:
+        print(f"No data available to train model {model_filename} for column {column_name}.")
         return model, 0, []
 
+    print(f"Training model {model_filename} for column {column_name} with data size: {len(current_data)}")
     train_size = int(0.8 * len(current_data))
     train_data = current_data.iloc[:train_size]
     test_data = current_data.iloc[train_size:]
@@ -97,14 +107,16 @@ def train_predictions(model, model_filename, current_data, column_name, retrain_
 
     x_test = test_data.drop(columns=[column_name])
     y_test = test_data[column_name]
+    print(f"Training data size: {x_train.shape}, Test data size: {x_test.shape}")
 
     try:
-        trained_model = pickle.load(open(model_filename + ".pkl", "rb"))
+        trained_model = pickle.load(open("training_environment/models/" + model_filename + ".pkl", "rb"))
     except (OSError, IOError) as e:
         model.fit(x_train, y_train)
-        pickle.dump(model, open(model_filename + ".pkl", "wb"))
+        pickle.dump(model, open("training_environment/models/" + model_filename + ".pkl", "wb"))
     else:
         if retrain_model:
+            print(f"Retraining model {model_filename} for column {column_name}.")
             model.fit(x_train, y_train)
             pickle.dump(model, open(model_filename + ".pkl", "wb"))
         else:

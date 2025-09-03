@@ -20,10 +20,10 @@ spec:
         deployment: eros-data-catalogue
     spec:
       imagePullSecrets:
-        - name: marco-regcred
+        - name: nemo-regcred
       containers:
         - name: eros-data-catalogue
-          image: marcothedood/eros4nrg-demo:data-catalogue-v1.7
+          image: nemometaos/eros-data-catalogue
           imagePullPolicy: Always
           ports:
             - containerPort: 8003

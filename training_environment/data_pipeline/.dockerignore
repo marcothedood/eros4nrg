@@ -1,0 +1,21 @@
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+*.log
+.env
+.env.*
+.DS_Store
+
+# VCS / editor
+.git/
+.gitignore
+.gitattributes
+.vscode/
+.idea/
+
+# build outputs
+build/
+dist/
+*.egg-info/

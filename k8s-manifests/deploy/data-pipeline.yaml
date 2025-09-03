@@ -20,7 +20,7 @@ spec:
         deployment: eros-data-pipeline
     spec:
       imagePullSecrets:
-        - name: marco-regcred
+        - name: nemo-regcred
       initContainers:
       - name: wait-for-migration
         image: postgres:14-alpine
@@ -50,7 +50,7 @@ spec:
             echo "Schema ready."
       containers:
         - name: eros-data-pipeline
-          image: marcothedood/eros4nrg-demo:data-pipeline-v8
+          image: nemometaos/eros-data-pipeline
           imagePullPolicy: Always
           ports:
             - containerPort: 8002

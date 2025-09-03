@@ -1,25 +1,16 @@
-#
-FROM python:3.11.2
+FROM python:3.11-slim
 
-#
 WORKDIR /EROS4NRG
+ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/EROS4NRG
 
-COPY ./training_environment/requirements.txt .
+COPY requirements.txt .
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --no-cache-dir -r requirements.txt
 
-#
-RUN pip install --no-cache-dir -r requirements.txt
+COPY config ./config
+COPY clients ./clients
+COPY dataset.py facebook_prophet.py regressors.py train_MLP.py utils.py start_training.sh ./
 
-ENV PYTHONPATH="${PYTHONPATH}:/EROS4NRG"
+RUN chmod +x /EROS4NRG/start_training.sh
 
-COPY ./config config/
-COPY ./clients clients/
-COPY ./data_pipeline/ data_pipeline/
-COPY ./training_environment/ training_environment/
-
-# Change permission for bash script
-RUN chmod 744 training_environment/regressors.py
-RUN chmod 744 training_environment/train_MLP.py
-RUN chmod 744 training_environment/start_training.sh
-
-#
-CMD ["training_environment/start_training.sh"]
+CMD ["bash", "start_training.sh"]
