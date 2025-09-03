@@ -1,6 +1,8 @@
 ### PROJECT CONVERTED FROM DOCKER-FILES TO K8S Manifests.
 
-The files in this folder, feature a modular, Kubernetes data platform designed for deployment on an Amazon EKS (Elastic Kubernetes Service) cluster. It ingests, transforms, stores, secures, and analyzes data captured from IoT sources in real time.
+The files in this folder, feature a modular, Kubernetes data platform designed for deployment on a K8s cluster. It ingests, transforms, stores, secures, and analyzes data captured from IoT sources in real time.
+
+For this setup, we support both the Nemo cluster and an AWS EKS testbed.
 
 The architecture is built around microservices deployed using Kustomize, enabling granular control over each component and its dependencies.
 
@@ -48,55 +50,59 @@ The platform is composed of the following core modules:
 The Kubernetes manifests are organized using kustomize, allowing modular deployment of each component. 
 Here's a high-level view of the folder structure:
 ```
-k8s/
-├── deploy/
-|   ├── grafana_provisioning/
-│   |    ├── dashboards-config.yaml
-|   |    └── datasources.yaml
+.
+├── deploy
 │   ├── data-catalogue.yaml
+│   ├── data-pipeline.yaml
+│   ├── grafana.yaml
+│   ├── grafana_backup
+│   │   ├── asm_terni_1740691866670.json
+│   │   └── emotion_1755772424649.json
+│   ├── grafana_provisioning
+│   │   ├── asm_terni_1740691866670.json
+│   │   ├── dashboards-config.yaml
+│   │   ├── datasources.yaml
+│   │   └── emotion_1755772424649.json
+│   ├── iot-stream.yaml
 │   ├── keycloak.yaml
 │   ├── kustomization.yaml
-|   ├── data-pipeline.yaml
-|   ├── grafana.yaml
-|   ├── iot-stream.yaml
-|   ├── minio.yaml
-|   ├── postgres.yaml
-|   └── training-environment.yaml
-├── svc/
-│   ├── data-catalogue.yaml
-│   ├── keycloak.yaml
-│   ├── kustomization.yaml
-|   ├── data-pipeline.yaml
-|   ├── grafana.yaml
-|   ├── iot-stream.yaml
-|   ├── minio.yaml
-|   ├── postgres.yaml
-|   └── training-environment.yaml
-├── pvcs/
-│   ├── keycloak.yaml
-│   ├── iotdata.yaml
+│   ├── minio.yaml
 │   ├── postgres.yaml
+│   └── training-environment.yaml
+├── ingress
+│   ├── ingress.yaml
 │   └── kustomization.yaml
-├── secrets/
-|    ├── postgres.yaml
-|    ├── keycloak.yaml
-|    ├── grafana.yaml
-|    ├── minio.yaml
-|    ├── docker.yaml
-│    └── kustomization.yaml
-├── storageclass/
-|    ├── aws-sc.yaml
-│    └── kustomization.yaml
-├── namespace/
-|    ├── nemo.yaml
-│    └── kustomization.yaml
-├── ingressclass/
-|    ├── ingressclass.yaml
-│    └── kustomization.yaml
-├── ingress/
-|    ├── ingress.yaml
-│    └── kustomization.yaml
-└── kustomization.yaml
+├── jobs
+│   ├── eros-pg-boostrap-job.yaml
+│   ├── kustomization.yaml
+│   └── sql
+│       ├── 00_schemas.sql
+│       ├── 10_tables_core.sql
+│       ├── 20_type_fixes.sql
+│       ├── 30_asserts.sql
+│       └── 90_version_stamp.sql
+├── kustomization.yaml
+├── pvcs
+│   ├── iotdata.yaml
+│   ├── keycloak.yaml
+│   ├── kustomization.yaml
+│   └── postgres.yaml
+├── secrets
+│   ├── grafana.yaml
+│   ├── keycloak.yaml
+│   ├── kustomization.yaml
+│   ├── minio.yaml
+│   └── postgres.yaml
+└── svc
+    ├── data-catalogue.yaml
+    ├── data-pipeline.yaml
+    ├── grafana.yaml
+    ├── iot-stream.yaml
+    ├── keycloak.yaml
+    ├── kustomization.yaml
+    ├── minio.yaml
+    ├── postgres.yaml
+    └── training-environment.yaml
 ```
 
 
@@ -127,7 +133,7 @@ Hereafter, you can find the order if you prefer to proceed manual, piece meal.
     
 8.  **Data Catalogue**
     
-9.  **training-environment**  # Predictive Analysis
+9.  **training-environment**
 
 10. **IngressClass** (if not already created)
 
@@ -332,6 +338,7 @@ imagePullSecrets:
 ```
 in our deployments. 
 
+
 ### ⚠️ Each image should:
 
 
@@ -365,7 +372,7 @@ stages:
   - test
 
 variables:
-  CI_REGISTRY_IMAGE: nemometaos/data-catalogue
+  CI_REGISTRY_IMAGE: nemometaos/eros-data-catalogue
 
 buildkit:
   extends: .buildkit
@@ -378,9 +385,12 @@ unit-test:
     - echo "Tests passed successfully!"
 ```
 
-In our case, since our repo is multi-image, we tweaked the gitlab-ci.yml file to include the dockerfiles in the build stage:
+In our case, since our repo is multi-image and the CI/CD pipeline for building images doesn't support multiple contexes, we splitted it in sub repos, one for each component:
 
-![gitlab-ci.yml file multi image](images/gitlab-ci.png)
+- [iot-streams](https://gitlab.eclipse.org/eclipse-research-labs/nemo-project/opencall-1/eros4nrg/iot-streams.git)
+- [data-pipeline](https://gitlab.eclipse.org/eclipse-research-labs/nemo-project/opencall-1/eros4nrg/data-pipeline.git)
+- [data-catalogue](https://gitlab.eclipse.org/eclipse-research-labs/nemo-project/opencall-1/eros4nrg/data-catalogue.git)
+- [training-environment](https://gitlab.eclipse.org/eclipse-research-labs/nemo-project/opencall-1/eros4nrg/training-environment.git)
 
 This configuration ensures that:
 
@@ -388,7 +398,19 @@ This configuration ensures that:
 
 - Images are uploaded to the NEMO registry under the namespace `nemometaos/`<component>.
 
-- Tests can be added before pushing images.
+In the k8s folder, you'll see:
+
+```yaml
+imagePullSecrets:
+        - name: nemo-regcred
+```
+And 
+```yaml
+          image: nemometaos/eros-data-catalogue
+```
+as per the documentation.
+This enables the k8s cluster to pull images from the official NEMO docker registry.
+The nemo-regcred secret is already deployed on the Nemo cluster.
 
 ## Deployment via FluxCD
 
